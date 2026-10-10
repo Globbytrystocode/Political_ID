@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People's Republic of ID</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f0e8;color:#24231f;font-family:Arial,sans-serif}
+header{padding:25px 20px;text-align:center;border-bottom:2px solid #24231f}
+h1{font-size:clamp(27px,5vw,45px);margin:0;font-weight:900;letter-spacing:-2px}
+header p{margin:8px 0 0;font-size:12px;letter-spacing:2px;text-transform:uppercase}
+main{max-width:1000px;margin:25px auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.panel{background:white;border:1px solid #ddd6cb;border-radius:12px;padding:20px}
+h2{font-size:16px;margin:0 0 18px}
+label{font-size:12px;font-weight:bold;display:block;margin:15px 0 7px}
+input,select{width:100%;padding:12px;border:1px solid #ccc5b9;border-radius:7px;font:inherit;background:white}
+.choices,.stickers{display:flex;flex-wrap:wrap;gap:8px}
+button{cursor:pointer;font:inherit}
+.choice,.sticker{border:1px solid #ddd6cb;background:#faf8f4;border-radius:8px;padding:9px}
+.choice.active{border:2px solid #ef684d;background:#fff1ec}
+.choice span{display:block;font-size:27px;margin-bottom:4px}
+.choice small{font-size:11px}
+.sticker{font-size:26px;min-width:48px}
+.sticker:hover,.choice:hover{border-color:#ef684d}
+.hint{font-size:12px;color:#777;line-height:1.5}
+.preview-wrap{min-width:0}
+.card{width:100%;max-width:440px;margin:auto;aspect-ratio:1.58;background:#f7d84b;border:3px solid #24231f;border-radius:10px;padding:5%;position:relative;overflow:hidden;box-shadow:5px 5px 0 #24231f}
+.card:before{content:"";position:absolute;inset:10px;border:1px solid #24231f;pointer-events:none}
+.card-top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:clamp(8px,1.7vw,12px);font-weight:900;text-transform:uppercase;letter-spacing:1px}
+.card-title{font-size:clamp(16px,3.7vw,28px);font-weight:900;margin-top:7px;line-height:1}
+.card-content{display:flex;gap:5%;margin-top:5%;align-items:flex-start}
+.portrait{width:40%;aspect-ratio:0.78;border:2px solid #24231f;background:#f1a18c;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
+.portrait .face{font-size:clamp(40px,9vw,76px)}
+.portrait small{font-size:clamp(8px,1.6vw,12px);font-weight:bold}
+.fields{flex:1;min-width:0}
+.field-label{font-size:clamp(7px,1.4vw,10px);text-transform:uppercase;font-weight:bold;margin-top:8px}
+.field-value{font-size:clamp(11px,2.5vw,19px);font-weight:900;overflow-wrap:anywhere;line-height:1.1}
+.card-bottom{position:absolute;bottom:7%;left:6%;right:6%;display:flex;justify-content:space-between;align-items:end;font-size:clamp(7px,1.4vw,10px);font-weight:bold;text-transform:uppercase}
+.mini-stars{font-size:17px;letter-spacing:2px}
+.placed-sticker{position:absolute;left:55%;top:50%;font-size:38px;cursor:grab;touch-action:none;user-select:none;z-index:3;line-height:1}
+.placed-sticker:active{cursor:grabbing}
+.remove{position:absolute;top:-8px;right:-8px;width:20px;height:20px;border:0;border-radius:50%;background:#24231f;color:white;font-size:13px;display:none}
+.placed-sticker.selected .remove{display:block}
+.download{width:100%;padding:15px;background:#ef684d;color:white;border:2px solid #24231f;border-radius:8px;font-weight:900;margin-top:20px}
+.download:hover{background:#dd5037}
+.clear{padding:8px 12px;border:1px solid #ccc5b9;background:white;border-radius:7px;font-size:12px}
+@media(max-width:650px){main{grid-template-columns:1fr}.preview-wrap{grid-row:1}.panel{padding:16px}.card{max-width:420px}}
+</style>
+</head>
+<body>
+<header>
+<h1>PEOPLE'S REPUBLIC OF ID</h1>
+<p>Officially unofficial identification · Est. whenever</p>
+</header>
+<main>
+<section class="panel">
+<h2>01 / BUILD YOUR CITIZEN</h2>
+<label>CHOOSE YOUR POLITICIAN</label>
+<div class="choices" id="choices">
+<button class="choice active" data-name="BIBI" data-face="😎"><span>😎</span><small>Bibi</small></button>
+<button class="choice" data-name="BEN GVIR" data-face="🤠"><span>🤠</span><small>Ben Gvir</small></button>
+<button class="choice" data-name="SMOTRICH" data-face="🧐"><span>🧐</span><small>Smotrich</small></button>
+<button class="choice" data-name="YOUR GUY" data-face="🥸"><span>🥸</span><small>Other</small></button>
+</div>
+<label>NAME</label>
+<input id="name" value="BIBI" maxlength="45">
+<label>OFFICIAL TITLE</label>
+<input id="job" value="Minister of Everything" maxlength="55">
+<label>PERSONALITY TRAIT</label>
+<input id="trait" value="Extremely trustworthy" maxlength="55">
+<label>IDENTIFICATION NUMBER</label>
+<input id="number" value="000-LOL-2026" maxlength="24">
+<p class="hint">Your text appears on the card as you type.</p>
+<h2 style="margin-top:26px">02 / ADD SOME NONSENSE</h2>
+<div class="stickers" id="stickers">
+<button class="sticker" data-sticker="🐊" aria-label="Alligator">🐊</button>
+<button class="sticker" data-sticker="💖" aria-label="Heart">💖</button>
+<button class="sticker" data-sticker="⭐" aria-label="Star">⭐</button>
+<button class="sticker" data-sticker="🍌" aria-label="Banana">🍌</button>
+<button class="sticker" data-sticker="💥" aria-label="Explosion">💥</button>
+<button class="sticker" data-sticker="🕶️" aria-label="Sunglasses">🕶️</button>
+<button class="sticker" data-sticker="🤡" aria-label="Clown">🤡</button>
+<button class="sticker" data-sticker="🪽" aria-label="Wings">🪽</button>
+</div>
+<p class="hint">Tap a sticker to add it. Drag stickers around the card. Tap a sticker on the card to select it, then use × to remove it.</p>
+</section>
+<section class="preview-wrap">
+<div class="card" id="card">
+<div class="card-top"><span>STATE OF ABSURDITY</span><span>★ ID ★</span></div>
+<div class="card-title">CITIZENSHIP CARD</div>
+<div class="card-content">
+<div class="portrait" id="portrait"><div class="face" id="face">😎</div><small>OFFICIAL PORTRAIT</small></div>
+<div class="fields">
+<div class="field-label">Full name</div><div class="field-value" id="outName">BIBI</div>
+<div class="field-label">Occupation</div><div class="field-value" id="outJob">Minister of Everything</div>
+<div class="field-label">Distinguishing feature</div><div class="field-value" id="outTrait">Extremely trustworthy</div>
+</div>
+</div>
+<div class="card-bottom"><span id="outNumber">000-LOL-2026</span><span class="mini-stars">★ ★ ★</span></div>
+</div>
+<button class="download" id="download">DOWNLOAD YOUR ID ↓</button>
+<p class="hint" style="text-align:center">Select a sticker on the card to remove it. Make something questionable.</p>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const fields=[["name","outName"],["job","outJob"],["trait","outTrait"],["number","outNumber"]];
+fields.forEach(([input,out])=>$(input).addEventListener("input",()=>$(out).textContent=$(input).value||" "));
+document.querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".choice").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ $("name").value=btn.dataset.name;
+ $("outName").textContent=btn.dataset.name;
+ $("face").textContent=btn.dataset.face;
+ $("portrait").style.background=["#f1a18c","#b7d3a8","#c4b6df","#f1d08a"][Array.from(document.querySelectorAll(".choice")).indexOf(btn)];
+}));
+let selected=null;
+function addSticker(symbol){
+ const el=document.createElement("div");
+ el.className="placed-sticker";
+ el.textContent=symbol;
+ el.style.left=(15+Math.random()*60)+"%";
+ el.style.top=(35+Math.random()*45)+"%";
+ const remove=document.createElement("button");
+ remove.className="remove";remove.textContent="×";remove.setAttribute("aria-label","Remove sticker");
+ remove.addEventListener("pointerdown",e=>e.stopPropagation());
+ remove.addEventListener("click",e=>{e.stopPropagation();el.remove();if(selected===el)selected=null;});
+ el.appendChild(remove);
+ el.addEventListener("pointerdown",e=>{
+  if(e.target===remove)return;
+  e.preventDefault();
+  if(selected)selected.classList.remove("selected");
+  selected=el;el.classList.add("selected");
+  const rect=$("card").getBoundingClientRect();
+  const startX=e.clientX,startY=e.clientY;
+  const left=parseFloat(el.style.left),top=parseFloat(el.style.top);
+  el.setPointerCapture(e.pointerId);
+  function move(ev){
+   el.style.left=Math.max(0,Math.min(90,left+(ev.clientX-startX)/rect.width*100))+"%";
+   el.style.top=Math.max(0,Math.min(90,top+(ev.clientY-startY)/rect.height*100))+"%";
+  }
+  function up(){el.removeEventListener("pointermove",move);el.removeEventListener("pointerup",up);}
+  el.addEventListener("pointermove",move);el.addEventListener("pointerup",up);
+ });
+ el.addEventListener("click",()=>{if(selected&&selected!==el)selected.classList.remove("selected");selected=el;el.classList.add("selected");});
+ $("card").appendChild(el);
+}
+document.querySelectorAll(".sticker").forEach(b=>b.addEventListener("click",()=>addSticker(b.dataset.sticker)));
+$("card").addEventListener("pointerdown",e=>{if(e.target===$("card")&&selected){selected.classList.remove("selected");selected=null;}});
+$("download").addEventListener("click",async()=>{
+ if(!window.html2canvas){alert("Download library did not load. Check your internet connection and try again.");return;}
+ $("download").disabled=true;$("download").textContent="PREPARING YOUR ID…";
+ try{
+  if(selected)selected.classList.remove("selected");
+  const canvas=await html2canvas($("card"),{scale:3,backgroundColor:null});
+  const a=document.createElement("a");
+  a.download="my-satirical-id.png";a.href=canvas.toDataURL("image/png");a.click();
+ }catch(e){alert("The image could not be exported. Please try again.");}
+ finally{$("download").disabled=false;$("download").textContent="DOWNLOAD YOUR ID ↓";}
+});
+</script>
+</body>
+</html>
