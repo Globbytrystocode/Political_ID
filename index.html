@@ -66,9 +66,9 @@
       <h2>מיי יור און איי די</h2>
 
       <h3> פוליטיקאי.ת לבחירה</h3>
-      <label class="file-button" for="photoUpload" style="display:block;text-align:center">＋ Add politician photos</label>
+      <label class="file-button" for="photoUpload" style="display:block;text-align:center">＋ Add photos from computer</label>
       <input id="photoUpload" type="file" accept="image/*" multiple hidden />
-      <p class="hint">Upload photos from your computer. They'll appear in your gallery below for this session.</p>
+      <p class="hint">Photos listed in the website code appear here for every visitor. You can also add temporary photos from your computer.</p>
       <div id="photoGallery" class="gallery" style="margin-top:10px"></div>
       <div class="row" style="margin-top:8px"><button id="removePhoto" class="small-button">Remove picture</button></div>
 
@@ -99,7 +99,7 @@
       <div class="row"><button id="deleteSelected" class="small-button">Delete selected item</button><button id="resetLayout" class="small-button">Reset layout</button></div>
       <p class="hint">Click a sticker to select it, drag it to move it, and use the size slider to resize it.</p>
       <button id="downloadButton" class="primary download">Download finished ID as PNG ↓</button>
-      <div id="status" class="empty-note">Tip: upload your photo collection and sticker PNGs to get started.</div>
+      <div id="status" class="empty-note">Tip: choose a photo from the gallery, or add photos from your computer.</div>
     </section>
 
     <section class="workspace">
@@ -111,7 +111,7 @@
           <div id="freeText" class="movable" contenteditable="false" spellcheck="false"></div>
         </div>
       </div>
-      <div></div>תשתלדו לא לעשות תוכן קרינג׳ או רציני מדי.</div>
+      <p class="hint" style="text-align:center;margin-top:10px">תשתדלו לא לעשות תוכן קרינג׳ או רציני מדי.</p>
     </section>
   </main>
   <footer>HARA IN PHOTOSHOP.</footer>
@@ -129,6 +129,29 @@
     let photoItems = [];
     let stickerItems = [];
     let drag = null;
+
+    // Add your permanent gallery photos here.
+    // Upload each image to the "politicians" folder in your GitHub repository,
+    // then add its exact path below, for example: "politicians/bibi.jpg".
+    const politicianPhotos = [
+      "politicians/bengvir.jpeg",
+      "politicians/bennyyy bantz.jpeg",
+      "politicians/bezlzlzlon.jpeg",
+      "politicians/bibs.jpeg",
+      "politicians/lapid.webp",
+      "politicians/derry.webp",
+      "politicians/faiglin.webp",
+      "politicians/pedo.webp",
+      "politicians/yairgoln.webp",
+      "politicians/namaa.webp",
+      "politicians/naftul.webp",
+      "politicians/litzman.jpeg",
+      "politicians/nir.jpeg",
+      "politicians/tali.webp",
+      "politicians/gadi.jpeg",
+      "politicians/katz.jpeg",
+    
+    ];
 
     function status(message) { statusBox.textContent = message; }
     function selectItem(item) {
@@ -160,6 +183,33 @@
       photoGallery.appendChild(button);
       if (photoItems.length === 1) button.click();
     }
+    function addRemotePhoto(src) {
+      const button = document.createElement('button');
+      button.className = 'thumb';
+      button.title = '';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.addEventListener('error', () => {
+        button.remove();
+        console.warn('Photo not found: ' + src);
+      });
+      button.appendChild(img);
+      button.addEventListener('click', () => {
+        photo.src = src;
+        photo.style.display = 'block';
+        document.querySelectorAll('#photoGallery .thumb').forEach(el => el.classList.remove('active'));
+        button.classList.add('active');
+        selectItem(photo);
+        status('Picture selected. It appears inside the blue photo frame.');
+      });
+      photoGallery.appendChild(button);
+    }
+
+    // Load the permanent photos from the politicians folder.
+    politicianPhotos.forEach(addRemotePhoto);
+
     document.getElementById('photoUpload').addEventListener('change', event => {
       [...event.target.files].forEach(addPhoto); event.target.value = '';
     });
