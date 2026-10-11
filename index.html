@@ -1,166 +1,278 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>People's Republic of ID</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#f5f0e8;color:#24231f;font-family:Arial,sans-serif}
-header{padding:25px 20px;text-align:center;border-bottom:2px solid #24231f}
-h1{font-size:clamp(27px,5vw,45px);margin:0;font-weight:900;letter-spacing:-2px}
-header p{margin:8px 0 0;font-size:12px;letter-spacing:2px;text-transform:uppercase}
-main{max-width:1000px;margin:25px auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
-.panel{background:white;border:1px solid #ddd6cb;border-radius:12px;padding:20px}
-h2{font-size:16px;margin:0 0 18px}
-label{font-size:12px;font-weight:bold;display:block;margin:15px 0 7px}
-input,select{width:100%;padding:12px;border:1px solid #ccc5b9;border-radius:7px;font:inherit;background:white}
-.choices,.stickers{display:flex;flex-wrap:wrap;gap:8px}
-button{cursor:pointer;font:inherit}
-.choice,.sticker{border:1px solid #ddd6cb;background:#faf8f4;border-radius:8px;padding:9px}
-.choice.active{border:2px solid #ef684d;background:#fff1ec}
-.choice span{display:block;font-size:27px;margin-bottom:4px}
-.choice small{font-size:11px}
-.sticker{font-size:26px;min-width:48px}
-.sticker:hover,.choice:hover{border-color:#ef684d}
-.hint{font-size:12px;color:#777;line-height:1.5}
-.preview-wrap{min-width:0}
-.card{width:100%;max-width:440px;margin:auto;aspect-ratio:1.58;background:#f7d84b;border:3px solid #24231f;border-radius:10px;padding:5%;position:relative;overflow:hidden;box-shadow:5px 5px 0 #24231f}
-.card:before{content:"";position:absolute;inset:10px;border:1px solid #24231f;pointer-events:none}
-.card-top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:clamp(8px,1.7vw,12px);font-weight:900;text-transform:uppercase;letter-spacing:1px}
-.card-title{font-size:clamp(16px,3.7vw,28px);font-weight:900;margin-top:7px;line-height:1}
-.card-content{display:flex;gap:5%;margin-top:5%;align-items:flex-start}
-.portrait{width:40%;aspect-ratio:0.78;border:2px solid #24231f;background:#f1a18c;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
-.portrait .face{font-size:clamp(40px,9vw,76px)}
-.portrait small{font-size:clamp(8px,1.6vw,12px);font-weight:bold}
-.fields{flex:1;min-width:0}
-.field-label{font-size:clamp(7px,1.4vw,10px);text-transform:uppercase;font-weight:bold;margin-top:8px}
-.field-value{font-size:clamp(11px,2.5vw,19px);font-weight:900;overflow-wrap:anywhere;line-height:1.1}
-.card-bottom{position:absolute;bottom:7%;left:6%;right:6%;display:flex;justify-content:space-between;align-items:end;font-size:clamp(7px,1.4vw,10px);font-weight:bold;text-transform:uppercase}
-.mini-stars{font-size:17px;letter-spacing:2px}
-.placed-sticker{position:absolute;left:55%;top:50%;font-size:38px;cursor:grab;touch-action:none;user-select:none;z-index:3;line-height:1}
-.placed-sticker:active{cursor:grabbing}
-.remove{position:absolute;top:-8px;right:-8px;width:20px;height:20px;border:0;border-radius:50%;background:#24231f;color:white;font-size:13px;display:none}
-.placed-sticker.selected .remove{display:block}
-.download{width:100%;padding:15px;background:#ef684d;color:white;border:2px solid #24231f;border-radius:8px;font-weight:900;margin-top:20px}
-.download:hover{background:#dd5037}
-.clear{padding:8px 12px;border:1px solid #ccc5b9;background:white;border-radius:7px;font-size:12px}
-@media(max-width:650px){main{grid-template-columns:1fr}.preview-wrap{grid-row:1}.panel{padding:16px}.card{max-width:420px}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>״פוליטיקל איי די</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    :root { --pink:#f044a7; --ink:#25212a; --paper:#fffafc; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f7f3f7; color:var(--ink); font-family:Arial, sans-serif; }
+    header { padding:26px 18px 10px; text-align:center; }
+    h1 { margin:0; font-size:clamp(28px,5vw,46px); font-weight:900; direction:rtl; }
+    .subtitle { margin:8px 0 0; color:#6e6570; font-size:14px; }
+    .app { max-width:1240px; margin:0 auto; padding:20px; display:grid; grid-template-columns:minmax(280px,350px) minmax(0,1fr); gap:24px; align-items:start; }
+    .panel { background:#fff; border:1px solid #e9e0e9; border-radius:18px; padding:18px; box-shadow:0 8px 30px #38213b0b; }
+    .panel h2 { font-size:17px; margin:0 0 12px; }
+    .panel h3 { font-size:13px; margin:18px 0 8px; text-transform:uppercase; letter-spacing:.08em; color:#716572; }
+    .hint { font-size:12px; line-height:1.45; color:#746b75; margin:7px 0 0; }
+    textarea { width:100%; min-height:125px; resize:vertical; border:1px solid #d8cbd9; border-radius:10px; padding:11px; font:16px/1.4 Arial,sans-serif; }
+    input[type="file"] { width:100%; font-size:12px; }
+    button, .file-button { border:0; border-radius:10px; padding:10px 12px; font:700 13px Arial,sans-serif; cursor:pointer; background:#f5e8f2; color:#372739; }
+    button:hover, .file-button:hover { filter:brightness(.97); }
+    .primary { background:var(--pink); color:white; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .row > button { flex:1; }
+    .control { display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:13px; margin:10px 0; }
+    .control input[type="range"] { width:52%; accent-color:var(--pink); }
+    .control select { max-width:58%; padding:6px; border:1px solid #ded2df; border-radius:8px; }
+    .gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .thumb { border:2px solid transparent; border-radius:9px; overflow:hidden; padding:0; aspect-ratio:1; background:#f3eaf3; position:relative; }
+    .thumb.active { border-color:var(--pink); box-shadow:0 0 0 2px #f044a722; }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .thumb .remove-thumb { position:absolute; top:3px; right:3px; padding:2px 5px; border-radius:50%; background:#fff; color:#222; }
+    .stickers { display:flex; flex-wrap:wrap; gap:7px; }
+    .sticker-choice { font-size:25px; padding:6px; min-width:43px; background:#fff5fb; border:1px solid #f3d9eb; }
+    .workspace { min-width:0; }
+    .workspace-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
+    .workspace-top strong { font-size:14px; }
+    .canvas-wrap { padding:10px; border-radius:18px; background:#e8e1e9; box-shadow:inset 0 0 0 1px #d8cfd9; }
+    #cardStage { position:relative; width:100%; aspect-ratio:1448 / 968; overflow:hidden; background:#fff; user-select:none; touch-action:pan-y; }
+    #cardBackground { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; pointer-events:none; }
+    #photo { position:absolute; left:8.28%; top:30.27%; width:24.93%; height:54.96%; object-fit:cover; border-radius:5%; display:none; cursor:move; touch-action:none; }
+    .movable { position:absolute; cursor:move; touch-action:none; }
+    #freeText { left:40%; top:38%; width:48%; min-height:10%; padding:5px; color:#24202a; font:700 25px/1.18 Arial,sans-serif; white-space:pre-wrap; overflow-wrap:anywhere; text-align:left; outline:1px dashed transparent; border-radius:4px; user-select:none; }
+    #freeText.selected, .sticker.selected { outline:2px dashed #f044a7; outline-offset:2px; }
+    .sticker { position:absolute; font-size:48px; line-height:1; cursor:move; touch-action:none; filter:drop-shadow(1px 2px 1px #0002); }
+    .sticker img { width:100%; height:100%; object-fit:contain; display:block; pointer-events:none; }
+    .delete-sticker { position:absolute; right:-10px; top:-10px; width:22px; height:22px; padding:0; border-radius:50%; background:#24202a; color:white; font-size:14px; display:none; }
+    .sticker.selected .delete-sticker { display:block; }
+    .empty-note { padding:9px; border-radius:8px; background:#faf4fa; color:#756575; font-size:12px; line-height:1.4; margin-top:9px; }
+    .download { width:100%; margin-top:14px; padding:14px; font-size:15px; }
+    .small-button { padding:7px 9px; font-size:12px; }
+    footer { text-align:center; color:#827683; font-size:11px; padding:0 16px 24px; }
+    @media (max-width:850px) { .app { grid-template-columns:1fr; padding:12px; } .panel { order:2; } .workspace { order:1; } .canvas-wrap { padding:5px; } #freeText { font-size:clamp(12px,2.3vw,25px); } .sticker { font-size:clamp(22px,4.2vw,48px); } }
+  </style>
 </head>
 <body>
-<header>
-<h1>PEOPLE'S REPUBLIC OF ID</h1>
-<p>Officially unofficial identification · Est. whenever</p>
-</header>
-<main>
-<section class="panel">
-<h2>01 / BUILD YOUR CITIZEN</h2>
-<label>CHOOSE YOUR POLITICIAN</label>
-<div class="choices" id="choices">
-<button class="choice active" data-name="BIBI" data-face="😎"><span>😎</span><small>Bibi</small></button>
-<button class="choice" data-name="BEN GVIR" data-face="🤠"><span>🤠</span><small>Ben Gvir</small></button>
-<button class="choice" data-name="SMOTRICH" data-face="🧐"><span>🧐</span><small>Smotrich</small></button>
-<button class="choice" data-name="YOUR GUY" data-face="🥸"><span>🥸</span><small>Other</small></button>
-</div>
-<label>NAME</label>
-<input id="name" value="BIBI" maxlength="45">
-<label>OFFICIAL TITLE</label>
-<input id="job" value="Minister of Everything" maxlength="55">
-<label>PERSONALITY TRAIT</label>
-<input id="trait" value="Extremely trustworthy" maxlength="55">
-<label>IDENTIFICATION NUMBER</label>
-<input id="number" value="000-LOL-2026" maxlength="24">
-<p class="hint">Your text appears on the card as you type.</p>
-<h2 style="margin-top:26px">02 / ADD SOME NONSENSE</h2>
-<div class="stickers" id="stickers">
-<button class="sticker" data-sticker="🐊" aria-label="Alligator">🐊</button>
-<button class="sticker" data-sticker="💖" aria-label="Heart">💖</button>
-<button class="sticker" data-sticker="⭐" aria-label="Star">⭐</button>
-<button class="sticker" data-sticker="🍌" aria-label="Banana">🍌</button>
-<button class="sticker" data-sticker="💥" aria-label="Explosion">💥</button>
-<button class="sticker" data-sticker="🕶️" aria-label="Sunglasses">🕶️</button>
-<button class="sticker" data-sticker="🤡" aria-label="Clown">🤡</button>
-<button class="sticker" data-sticker="🪽" aria-label="Wings">🪽</button>
-</div>
-<p class="hint">Tap a sticker to add it. Drag stickers around the card. Tap a sticker on the card to select it, then use × to remove it.</p>
-</section>
-<section class="preview-wrap">
-<div class="card" id="card">
-<div class="card-top"><span>STATE OF ABSURDITY</span><span>★ ID ★</span></div>
-<div class="card-title">CITIZENSHIP CARD</div>
-<div class="card-content">
-<div class="portrait" id="portrait"><div class="face" id="face">😎</div><small>OFFICIAL PORTRAIT</small></div>
-<div class="fields">
-<div class="field-label">Full name</div><div class="field-value" id="outName">BIBI</div>
-<div class="field-label">Occupation</div><div class="field-value" id="outJob">Minister of Everything</div>
-<div class="field-label">Distinguishing feature</div><div class="field-value" id="outTrait">Extremely trustworthy</div>
-</div>
-</div>
-<div class="card-bottom"><span id="outNumber">000-LOL-2026</span><span class="mini-stars">★ ★ ★</span></div>
-</div>
-<button class="download" id="download">DOWNLOAD YOUR ID ↓</button>
-<p class="hint" style="text-align:center">Select a sticker on the card to remove it. Make something questionable.</p>
-</section>
-</main>
-<script>
-const $=id=>document.getElementById(id);
-const fields=[["name","outName"],["job","outJob"],["trait","outTrait"],["number","outNumber"]];
-fields.forEach(([input,out])=>$(input).addEventListener("input",()=>$(out).textContent=$(input).value||" "));
-document.querySelectorAll(".choice").forEach(btn=>btn.addEventListener("click",()=>{
- document.querySelectorAll(".choice").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- $("name").value=btn.dataset.name;
- $("outName").textContent=btn.dataset.name;
- $("face").textContent=btn.dataset.face;
- $("portrait").style.background=["#f1a18c","#b7d3a8","#c4b6df","#f1d08a"][Array.from(document.querySelectorAll(".choice")).indexOf(btn)];
-}));
-let selected=null;
-function addSticker(symbol){
- const el=document.createElement("div");
- el.className="placed-sticker";
- el.textContent=symbol;
- el.style.left=(15+Math.random()*60)+"%";
- el.style.top=(35+Math.random()*45)+"%";
- const remove=document.createElement("button");
- remove.className="remove";remove.textContent="×";remove.setAttribute("aria-label","Remove sticker");
- remove.addEventListener("pointerdown",e=>e.stopPropagation());
- remove.addEventListener("click",e=>{e.stopPropagation();el.remove();if(selected===el)selected=null;});
- el.appendChild(remove);
- el.addEventListener("pointerdown",e=>{
-  if(e.target===remove)return;
-  e.preventDefault();
-  if(selected)selected.classList.remove("selected");
-  selected=el;el.classList.add("selected");
-  const rect=$("card").getBoundingClientRect();
-  const startX=e.clientX,startY=e.clientY;
-  const left=parseFloat(el.style.left),top=parseFloat(el.style.top);
-  el.setPointerCapture(e.pointerId);
-  function move(ev){
-   el.style.left=Math.max(0,Math.min(90,left+(ev.clientX-startX)/rect.width*100))+"%";
-   el.style.top=Math.max(0,Math.min(90,top+(ev.clientY-startY)/rect.height*100))+"%";
-  }
-  function up(){el.removeEventListener("pointermove",move);el.removeEventListener("pointerup",up);}
-  el.addEventListener("pointermove",move);el.addEventListener("pointerup",up);
- });
- el.addEventListener("click",()=>{if(selected&&selected!==el)selected.classList.remove("selected");selected=el;el.classList.add("selected");});
- $("card").appendChild(el);
-}
-document.querySelectorAll(".sticker").forEach(b=>b.addEventListener("click",()=>addSticker(b.dataset.sticker)));
-$("card").addEventListener("pointerdown",e=>{if(e.target===$("card")&&selected){selected.classList.remove("selected");selected=null;}});
-$("download").addEventListener("click",async()=>{
- if(!window.html2canvas){alert("Download library did not load. Check your internet connection and try again.");return;}
- $("download").disabled=true;$("download").textContent="PREPARING YOUR ID…";
- try{
-  if(selected)selected.classList.remove("selected");
-  const canvas=await html2canvas($("card"),{scale:3,backgroundColor:null});
-  const a=document.createElement("a");
-  a.download="my-satirical-id.png";a.href=canvas.toDataURL("image/png");a.click();
- }catch(e){alert("The image could not be exported. Please try again.");}
- finally{$("download").disabled=false;$("download").textContent="DOWNLOAD YOUR ID ↓";}
-});
-</script>
+  <header>
+    <h1 lang="he" dir="rtl">״פוליטיקל איי די</h1>
+    <p class="subtitle">Make your own political ID card.</p>
+  </header>
+
+  <main class="app">
+    <section class="panel" aria-label="Card controls">
+      <h2>Make your ID</h2>
+
+      <h3>1 · Choose a picture</h3>
+      <label class="file-button" for="photoUpload" style="display:block;text-align:center">＋ Add politician photos</label>
+      <input id="photoUpload" type="file" accept="image/*" multiple hidden />
+      <p class="hint">Upload photos from your computer. They'll appear in your gallery below for this session.</p>
+      <div id="photoGallery" class="gallery" style="margin-top:10px"></div>
+      <div class="row" style="margin-top:8px"><button id="removePhoto" class="small-button">Remove picture</button></div>
+
+      <h3>2 · Write anything</h3>
+      <textarea id="textInput" placeholder="Write anything here…&#10;You can use multiple lines."></textarea>
+      <div class="control"><label for="fontSize">Text size</label><input id="fontSize" type="range" min="12" max="56" value="25" /></div>
+      <div class="control"><label for="textColor">Text color</label><input id="textColor" type="color" value="#24202a" /></div>
+      <div class="control"><label for="textAlign">Alignment</label><select id="textAlign"><option value="left">Left</option><option value="center">Center</option><option value="right">Right</option></select></div>
+      <div class="row"><button id="boldButton" class="small-button">Bold on/off</button><button id="clearText" class="small-button">Clear text</button></div>
+      <p class="hint">Drag the text on the card to position it. Use the controls here to style the whole text block.</p>
+
+      <h3>3 · Add stickers</h3>
+      <div class="stickers" id="stickerChoices">
+        <button class="sticker-choice" data-emoji="🐊" aria-label="Add alligator">🐊</button>
+        <button class="sticker-choice" data-emoji="💖" aria-label="Add heart">💖</button>
+        <button class="sticker-choice" data-emoji="⭐" aria-label="Add star">⭐</button>
+        <button class="sticker-choice" data-emoji="🍌" aria-label="Add banana">🍌</button>
+        <button class="sticker-choice" data-emoji="💥" aria-label="Add explosion">💥</button>
+        <button class="sticker-choice" data-emoji="🕶️" aria-label="Add sunglasses">🕶️</button>
+        <button class="sticker-choice" data-emoji="🤡" aria-label="Add clown">🤡</button>
+        <button class="sticker-choice" data-emoji="🪽" aria-label="Add wings">🪽</button>
+      </div>
+      <h3>Or upload your own stickers</h3>
+      <label class="file-button" for="stickerUpload" style="display:block;text-align:center">＋ Add sticker PNGs</label>
+      <input id="stickerUpload" type="file" accept="image/*" multiple hidden />
+      <div id="uploadedStickers" class="stickers" style="margin-top:9px"></div>
+      <div class="control"><label for="stickerSize">Selected sticker size</label><input id="stickerSize" type="range" min="24" max="180" value="70" /></div>
+      <div class="row"><button id="deleteSelected" class="small-button">Delete selected item</button><button id="resetLayout" class="small-button">Reset layout</button></div>
+      <p class="hint">Click a sticker to select it, drag it to move it, and use the size slider to resize it.</p>
+      <button id="downloadButton" class="primary download">Download finished ID as PNG ↓</button>
+      <div id="status" class="empty-note">Tip: upload your photo collection and sticker PNGs to get started.</div>
+    </section>
+
+    <section class="workspace">
+      <div class="workspace-top"><strong>Your ID card</strong><span class="hint">Click and drag text or stickers to move them.</span></div>
+      <div class="canvas-wrap">
+        <div id="cardStage">
+          <img id="cardBackground" src="id-background.png" alt="Your ID card background" />
+          <img id="photo" class="movable" alt="Selected politician" />
+          <div id="freeText" class="movable" contenteditable="false" spellcheck="false"></div>
+        </div>
+      </div>
+      <div class="empty-note">If the background doesn't appear, check that <strong>id-background.png</strong> is in the same GitHub folder as <strong>index.html</strong>.</div>
+    </section>
+  </main>
+  <footer>Made for political satire. Your uploaded photos and stickers are not saved to a permanent gallery.</footer>
+
+  <script>
+    const stage = document.getElementById('cardStage');
+    const photo = document.getElementById('photo');
+    const freeText = document.getElementById('freeText');
+    const textInput = document.getElementById('textInput');
+    const photoGallery = document.getElementById('photoGallery');
+    const stickerUpload = document.getElementById('stickerUpload');
+    const uploadedStickers = document.getElementById('uploadedStickers');
+    const statusBox = document.getElementById('status');
+    let selectedItem = null;
+    let photoItems = [];
+    let stickerItems = [];
+    let drag = null;
+
+    function status(message) { statusBox.textContent = message; }
+    function selectItem(item) {
+      document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+      selectedItem = item;
+      if (item) item.classList.add('selected');
+      if (item && item.classList.contains('sticker')) {
+        const size = parseFloat(item.dataset.size || 70);
+        document.getElementById('stickerSize').value = Math.min(180, Math.max(24, size));
+      }
+    }
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+
+    function addPhoto(file) {
+      const url = URL.createObjectURL(file);
+      const item = { file, url };
+      photoItems.push(item);
+      const button = document.createElement('button');
+      button.className = 'thumb';
+      button.title = file.name;
+      const img = document.createElement('img'); img.src = url; img.alt = file.name;
+      button.appendChild(img);
+      button.addEventListener('click', () => {
+        photo.src = url; photo.style.display = 'block';
+        document.querySelectorAll('#photoGallery .thumb').forEach(el => el.classList.remove('active'));
+        button.classList.add('active'); selectItem(photo);
+        status('Picture selected. It appears inside the blue photo frame.');
+      });
+      photoGallery.appendChild(button);
+      if (photoItems.length === 1) button.click();
+    }
+    document.getElementById('photoUpload').addEventListener('change', event => {
+      [...event.target.files].forEach(addPhoto); event.target.value = '';
+    });
+    document.getElementById('removePhoto').addEventListener('click', () => {
+      photo.style.display = 'none'; photo.removeAttribute('src');
+      document.querySelectorAll('#photoGallery .thumb').forEach(el => el.classList.remove('active'));
+      if (selectedItem === photo) selectItem(null);
+    });
+
+    textInput.addEventListener('input', () => { freeText.textContent = textInput.value; });
+    document.getElementById('fontSize').addEventListener('input', e => freeText.style.fontSize = e.target.value + 'px');
+    document.getElementById('textColor').addEventListener('input', e => freeText.style.color = e.target.value);
+    document.getElementById('textAlign').addEventListener('change', e => freeText.style.textAlign = e.target.value);
+    document.getElementById('boldButton').addEventListener('click', () => {
+      freeText.style.fontWeight = freeText.style.fontWeight === '400' ? '700' : '400';
+    });
+    document.getElementById('clearText').addEventListener('click', () => { textInput.value = ''; freeText.textContent = ''; });
+    freeText.addEventListener('pointerdown', event => { event.stopPropagation(); startDrag(event, freeText); selectItem(freeText); });
+
+    function addEmojiSticker(emoji) {
+      const el = document.createElement('div');
+      el.className = 'sticker movable'; el.textContent = emoji; el.dataset.size = '70';
+      el.style.left = '53%'; el.style.top = '58%'; el.style.width = '70px'; el.style.height = '70px'; el.style.fontSize = '55px';
+      addStickerControls(el); stage.appendChild(el); selectItem(el);
+    }
+    function addImageSticker(file) {
+      const url = URL.createObjectURL(file);
+      const el = document.createElement('div'); el.className = 'sticker movable';
+      el.dataset.size = '80'; el.style.left = '53%'; el.style.top = '58%'; el.style.width = '80px'; el.style.height = '80px';
+      const img = document.createElement('img'); img.src = url; img.alt = file.name; el.appendChild(img);
+      addStickerControls(el); stage.appendChild(el); selectItem(el);
+      const choice = document.createElement('button'); choice.className = 'sticker-choice'; choice.title = file.name; choice.style.width = '48px'; choice.style.height = '48px'; choice.style.padding = '3px';
+      const thumb = document.createElement('img'); thumb.src = url; thumb.style.width = '100%'; thumb.style.height = '100%'; thumb.style.objectFit = 'contain'; choice.appendChild(thumb);
+      choice.addEventListener('click', () => { selectItem(el); status('Sticker selected. Drag it or change its size.'); });
+      uploadedStickers.appendChild(choice); stickerItems.push({url, el});
+    }
+    function addStickerControls(el) {
+      const del = document.createElement('button'); del.className = 'delete-sticker'; del.type = 'button'; del.textContent = '×'; del.title = 'Remove sticker';
+      del.addEventListener('pointerdown', e => e.stopPropagation());
+      del.addEventListener('click', e => { e.stopPropagation(); el.remove(); if (selectedItem === el) selectItem(null); });
+      el.appendChild(del);
+      el.addEventListener('pointerdown', e => {
+        if (e.target === del) return;
+        e.stopPropagation(); selectItem(el); startDrag(e, el);
+      });
+      el.addEventListener('click', e => { e.stopPropagation(); selectItem(el); });
+    }
+    document.getElementById('stickerChoices').addEventListener('click', e => {
+      const button = e.target.closest('[data-emoji]'); if (button) addEmojiSticker(button.dataset.emoji);
+    });
+    stickerUpload.addEventListener('change', e => { [...e.target.files].forEach(addImageSticker); e.target.value = ''; });
+
+    function startDrag(event, el) {
+      if (event.button !== undefined && event.button !== 0) return;
+      const rect = stage.getBoundingClientRect();
+      const itemRect = el.getBoundingClientRect();
+      drag = { el, startX:event.clientX, startY:event.clientY, left:itemRect.left-rect.left, top:itemRect.top-rect.top, stageRect:rect };
+      try { el.setPointerCapture(event.pointerId); } catch (_) {}
+      event.preventDefault();
+    }
+    stage.addEventListener('pointermove', event => {
+      if (!drag) return;
+      const dx = event.clientX - drag.startX, dy = event.clientY - drag.startY;
+      const maxLeft = Math.max(0, stage.clientWidth - drag.el.offsetWidth);
+      const maxTop = Math.max(0, stage.clientHeight - drag.el.offsetHeight);
+      drag.el.style.left = clamp(drag.left + dx, 0, maxLeft) / stage.clientWidth * 100 + '%';
+      drag.el.style.top = clamp(drag.top + dy, 0, maxTop) / stage.clientHeight * 100 + '%';
+    });
+    window.addEventListener('pointerup', () => { drag = null; });
+    stage.addEventListener('pointerdown', e => { if (e.target === stage || e.target === document.getElementById('cardBackground')) selectItem(null); });
+
+    document.getElementById('stickerSize').addEventListener('input', e => {
+      if (!selectedItem || !selectedItem.classList.contains('sticker')) return;
+      const size = Number(e.target.value); selectedItem.dataset.size = String(size);
+      selectedItem.style.width = size + 'px'; selectedItem.style.height = size + 'px';
+      selectedItem.style.fontSize = Math.round(size * .78) + 'px';
+    });
+    document.getElementById('deleteSelected').addEventListener('click', () => {
+      if (selectedItem && selectedItem.classList.contains('sticker')) selectedItem.remove();
+      else if (selectedItem === freeText) { freeText.textContent = ''; textInput.value = ''; }
+      else if (selectedItem === photo) { photo.style.display = 'none'; photo.removeAttribute('src'); }
+      selectItem(null);
+    });
+    document.getElementById('resetLayout').addEventListener('click', () => {
+      freeText.style.left = '40%'; freeText.style.top = '38%';
+      photo.style.left = '8.28%'; photo.style.top = '30.27%'; photo.style.width = '24.93%'; photo.style.height = '54.96%';
+      stage.querySelectorAll('.sticker').forEach(el => el.remove()); selectItem(null);
+      status('Layout reset. Your text and selected photo are kept.');
+    });
+
+    document.getElementById('downloadButton').addEventListener('click', async () => {
+      const button = document.getElementById('downloadButton');
+      if (!document.getElementById('cardBackground').complete || !document.getElementById('cardBackground').naturalWidth) {
+        status('Background not found. Make sure id-background.png is next to index.html in GitHub.'); return;
+      }
+      const oldText = button.textContent; button.disabled = true; button.textContent = 'Creating PNG…';
+      const wasSelected = document.querySelector('.selected');
+      document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('.delete-sticker').forEach(el => el.style.display = 'none');
+      try {
+        const canvas = await html2canvas(stage, { scale:2, useCORS:true, backgroundColor:null, logging:false });
+        const link = document.createElement('a'); link.download = 'political-id.png'; link.href = canvas.toDataURL('image/png'); link.click();
+        status('Your ID card has been downloaded as a PNG.');
+      } catch (err) {
+        console.error(err); status('Could not export the image. Please refresh the page and try again.');
+      } finally {
+        document.querySelectorAll('.delete-sticker').forEach(el => el.style.display = '');
+        if (wasSelected && wasSelected.isConnected) selectItem(wasSelected);
+        button.disabled = false; button.textContent = oldText;
+      }
+    });
+
+    document.getElementById('cardBackground').addEventListener('error', () => status('Could not find id-background.png. Upload it to the same GitHub folder as index.html.'));
+  </script>
 </body>
 </html>
