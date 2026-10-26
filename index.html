@@ -48,8 +48,18 @@
     #cardBackground { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; pointer-events:none; }
 
     /* Slightly inset the politician photo from the frame edges. */
-    #photo { position:absolute; left:8.45%; top:30.5%; width:24.6%; height:54.5%; object-fit:cover; border-radius:3%; display:none; cursor:move; touch-action:none; }
-    .movable { position:absolute; cursor:move; touch-action:none; }
+  #photo {
+  position: absolute;
+  left: 9%;
+  top: 31%;
+  width: 23.5%;
+  height: 52.5%;
+  object-fit: cover;
+  border-radius: 3%;
+  display: none;
+  cursor: move;
+  touch-action: none;
+}
     #freeText { left:40%; top:38%; width:48%; min-height:10%; padding:5px; color:#24202a; font:700 25px/1.18 Arial,sans-serif; white-space:pre-wrap; overflow-wrap:anywhere; text-align:left; outline:1px dashed transparent; border-radius:4px; user-select:none; }
     #freeText.selected, .sticker.selected { outline:2px dashed #f044a7; outline-offset:2px; }
     .sticker { position:absolute; font-size:48px; line-height:1; cursor:move; touch-action:none; filter:drop-shadow(1px 2px 1px #0002); }
