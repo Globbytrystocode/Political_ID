@@ -27,20 +27,23 @@
     .control { display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:13px; margin:10px 0; }
     .control input[type="range"] { width:52%; accent-color:var(--pink); }
     .control select { max-width:58%; padding:6px; border:1px solid #ded2df; border-radius:8px; }
-    .gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+    .gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; max-height:220px; overflow-y:auto; overscroll-behavior:contain; padding:2px 5px 2px 2px; scrollbar-width:thin; }
     .thumb { border:2px solid transparent; border-radius:9px; overflow:hidden; padding:0; aspect-ratio:1; background:#f3eaf3; position:relative; }
     .thumb.active { border-color:var(--pink); box-shadow:0 0 0 2px #f044a722; }
     .thumb img { width:100%; height:100%; object-fit:cover; display:block; }
     .thumb .remove-thumb { position:absolute; top:3px; right:3px; padding:2px 5px; border-radius:50%; background:#fff; color:#222; }
-    .stickers { display:flex; flex-wrap:wrap; gap:7px; }
-    .sticker-choice { font-size:25px; padding:6px; min-width:43px; background:#fff5fb; border:1px solid #f3d9eb; }
+    .stickers { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; max-height:155px; overflow-y:auto; overscroll-behavior:contain; padding:2px 5px 2px 2px; scrollbar-width:thin; }
+    .sticker-choice { min-width:0; width:100%; height:56px; display:flex; align-items:center; justify-content:center; padding:5px; background:#fff5fb; border:1px solid #f3d9eb; overflow:hidden; }
+    .sticker-choice img { width:100%; height:100%; object-fit:contain; display:block; }
+    #uploadedStickers { max-height:145px; }
     .workspace { min-width:0; }
     .workspace-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0 0 10px; flex-wrap:wrap; }
     .workspace-top strong { font-size:14px; }
     .canvas-wrap { padding:10px; border-radius:18px; background:#e8e1e9; box-shadow:inset 0 0 0 1px #d8cfd9; }
     #cardStage { position:relative; width:100%; aspect-ratio:1448 / 968; overflow:hidden; background:#fff; user-select:none; touch-action:pan-y; }
     #cardBackground { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; pointer-events:none; }
-    #photo { position:absolute; left:8.28%; top:30.27%; width:24.93%; height:54.96%; object-fit:cover; border-radius:5%; display:none; cursor:move; touch-action:none; }
+    /* Slightly inset from the blue photo area so no edges cover its white frame. */
+    #photo { position:absolute; left:8.42%; top:30.48%; width:24.62%; height:54.42%; object-fit:cover; border-radius:6%; display:none; cursor:move; touch-action:none; }
     .movable { position:absolute; cursor:move; touch-action:none; }
     #freeText { left:40%; top:38%; width:48%; min-height:10%; padding:5px; color:#24202a; font:700 25px/1.18 Arial,sans-serif; white-space:pre-wrap; overflow-wrap:anywhere; text-align:left; outline:1px dashed transparent; border-radius:4px; user-select:none; }
     #freeText.selected, .sticker.selected { outline:2px dashed #f044a7; outline-offset:2px; }
@@ -52,7 +55,15 @@
     .download { width:100%; margin-top:14px; padding:14px; font-size:15px; }
     .small-button { padding:7px 9px; font-size:12px; }
     footer { text-align:center; color:#827683; font-size:11px; padding:0 16px 24px; }
-    @media (max-width:850px) { .app { grid-template-columns:1fr; padding:12px; } .panel { order:2; } .workspace { order:1; } .canvas-wrap { padding:5px; } #freeText { font-size:clamp(12px,2.3vw,25px); } .sticker { font-size:clamp(22px,4.2vw,48px); } }
+    @media (max-width:850px) {
+      .app { grid-template-columns:1fr; padding:12px; gap:12px; }
+      .panel { order:2; }
+      .workspace { order:1; position:sticky; top:0; z-index:30; background:#f7f3f7; padding:6px 0 9px; }
+      .workspace-top { display:none; }
+      .canvas-wrap { padding:5px; }
+      #freeText { font-size:clamp(12px,2.3vw,25px); }
+      .sticker { font-size:clamp(22px,4.2vw,48px); }
+    }
   </style>
 </head>
 <body>
@@ -81,16 +92,7 @@
       <p class="hint">Drag the text on the card to position it. Use the controls here to style the whole text block.</p>
 
       <h3>מדבקות ושטויות</h3>
-      <div class="stickers" id="stickerChoices">
-        <button class="sticker-choice" data-emoji="🐊" aria-label="Add alligator">🐊</button>
-        <button class="sticker-choice" data-emoji="💖" aria-label="Add heart">💖</button>
-        <button class="sticker-choice" data-emoji="⭐" aria-label="Add star">⭐</button>
-        <button class="sticker-choice" data-emoji="🍌" aria-label="Add banana">🍌</button>
-        <button class="sticker-choice" data-emoji="💥" aria-label="Add explosion">💥</button>
-        <button class="sticker-choice" data-emoji="🕶️" aria-label="Add sunglasses">🕶️</button>
-        <button class="sticker-choice" data-emoji="🤡" aria-label="Add clown">🤡</button>
-        <button class="sticker-choice" data-emoji="🪽" aria-label="Add wings">🪽</button>
-      </div>
+      <div class="stickers" id="stickerChoices" aria-label="Sticker gallery"></div>
       <h3>Or upload your own stickers</h3>
       <label class="file-button" for="stickerUpload" style="display:block;text-align:center">＋ Add sticker PNGs</label>
       <input id="stickerUpload" type="file" accept="image/*" multiple hidden />
@@ -134,23 +136,24 @@
     // Upload each image to the "politicians" folder in your GitHub repository,
     // then add its exact path below, for example: "politicians/bibi.jpg".
     const politicianPhotos = [
-      "politicians/bengvir.jpeg",
-      "politicians/bennyyy bantz.jpeg",
-      "politicians/bezlzlzlon.jpeg",
-      "politicians/bibs.jpeg",
-      "politicians/lapid.webp",
-      "politicians/derry.webp",
-      "politicians/faiglin.webp",
-      "politicians/pedo.webp",
-      "politicians/yairgoln.webp",
-      "politicians/namaa.webp",
-      "politicians/naftul.webp",
-      "politicians/litzman.jpeg",
-      "politicians/nir.jpeg",
-      "politicians/tali.webp",
-      "politicians/gadi.jpeg",
-      "politicians/katz.jpeg",
-    
+      "politicians/bibi.jpg",
+      "politicians/ben-gvir.jpg",
+      "politicians/smotrich.jpg",
+      "politicians/lapid.jpg"
+    ];
+
+    // Add permanent sticker PNGs here. Upload them to a folder named "stickers"
+    // in the same GitHub repository, then use the exact filenames below.
+    // Transparent PNGs work best.
+    const stickerPhotos = [
+      "stickers/alligator.png",
+      "stickers/heart.png",
+      "stickers/star.png",
+      "stickers/banana.png",
+      "stickers/explosion.png",
+      "stickers/sunglasses.png",
+      "stickers/clown.png",
+      "stickers/wings.png"
     ];
 
     function status(message) { statusBox.textContent = message; }
@@ -229,23 +232,31 @@
     document.getElementById('clearText').addEventListener('click', () => { textInput.value = ''; freeText.textContent = ''; });
     freeText.addEventListener('pointerdown', event => { event.stopPropagation(); startDrag(event, freeText); selectItem(freeText); });
 
-    function addEmojiSticker(emoji) {
-      const el = document.createElement('div');
-      el.className = 'sticker movable'; el.textContent = emoji; el.dataset.size = '70';
-      el.style.left = '53%'; el.style.top = '58%'; el.style.width = '70px'; el.style.height = '70px'; el.style.fontSize = '55px';
+    function placeImageSticker(src, label = 'Sticker') {
+      const el = document.createElement('div'); el.className = 'sticker movable';
+      el.dataset.size = '80'; el.style.left = '53%'; el.style.top = '58%'; el.style.width = '80px'; el.style.height = '80px';
+      const img = document.createElement('img'); img.src = src; img.alt = label; el.appendChild(img);
       addStickerControls(el); stage.appendChild(el); selectItem(el);
+      status('Sticker added. Drag it to move it or change its size.');
+      return el;
+    }
+    function addPermanentStickerChoice(src) {
+      const choice = document.createElement('button'); choice.type = 'button'; choice.className = 'sticker-choice'; choice.title = 'Add sticker'; choice.setAttribute('aria-label', 'Add sticker');
+      const thumb = document.createElement('img'); thumb.src = src; thumb.alt = ''; thumb.loading = 'lazy';
+      thumb.addEventListener('error', () => choice.remove());
+      choice.appendChild(thumb);
+      choice.addEventListener('click', () => placeImageSticker(src));
+      document.getElementById('stickerChoices').appendChild(choice);
     }
     function addImageSticker(file) {
       const url = URL.createObjectURL(file);
-      const el = document.createElement('div'); el.className = 'sticker movable';
-      el.dataset.size = '80'; el.style.left = '53%'; el.style.top = '58%'; el.style.width = '80px'; el.style.height = '80px';
-      const img = document.createElement('img'); img.src = url; img.alt = file.name; el.appendChild(img);
-      addStickerControls(el); stage.appendChild(el); selectItem(el);
-      const choice = document.createElement('button'); choice.className = 'sticker-choice'; choice.title = file.name; choice.style.width = '48px'; choice.style.height = '48px'; choice.style.padding = '3px';
-      const thumb = document.createElement('img'); thumb.src = url; thumb.style.width = '100%'; thumb.style.height = '100%'; thumb.style.objectFit = 'contain'; choice.appendChild(thumb);
+      const el = placeImageSticker(url, file.name);
+      const choice = document.createElement('button'); choice.type = 'button'; choice.className = 'sticker-choice'; choice.title = file.name; choice.setAttribute('aria-label', 'Select ' + file.name);
+      const thumb = document.createElement('img'); thumb.src = url; thumb.alt = ''; choice.appendChild(thumb);
       choice.addEventListener('click', () => { selectItem(el); status('Sticker selected. Drag it or change its size.'); });
       uploadedStickers.appendChild(choice); stickerItems.push({url, el});
     }
+    stickerPhotos.forEach(addPermanentStickerChoice);
     function addStickerControls(el) {
       const del = document.createElement('button'); del.className = 'delete-sticker'; del.type = 'button'; del.textContent = '×'; del.title = 'Remove sticker';
       del.addEventListener('pointerdown', e => e.stopPropagation());
@@ -257,9 +268,6 @@
       });
       el.addEventListener('click', e => { e.stopPropagation(); selectItem(el); });
     }
-    document.getElementById('stickerChoices').addEventListener('click', e => {
-      const button = e.target.closest('[data-emoji]'); if (button) addEmojiSticker(button.dataset.emoji);
-    });
     stickerUpload.addEventListener('change', e => { [...e.target.files].forEach(addImageSticker); e.target.value = ''; });
 
     function startDrag(event, el) {
@@ -295,7 +303,7 @@
     });
     document.getElementById('resetLayout').addEventListener('click', () => {
       freeText.style.left = '40%'; freeText.style.top = '38%';
-      photo.style.left = '8.28%'; photo.style.top = '30.27%'; photo.style.width = '24.93%'; photo.style.height = '54.96%';
+      photo.style.left = '8.42%'; photo.style.top = '30.48%'; photo.style.width = '24.62%'; photo.style.height = '54.42%';
       stage.querySelectorAll('.sticker').forEach(el => el.remove()); selectItem(null);
       status('Layout reset. Your text and selected photo are kept.');
     });
