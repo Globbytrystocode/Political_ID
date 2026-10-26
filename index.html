@@ -60,7 +60,23 @@
   cursor: move;
   touch-action: none;
 }
-    #freeText { left:40%; top:38%; width:48%; min-height:10%; padding:5px; color:#24202a; font:700 25px/1.18 Arial,sans-serif; white-space:pre-wrap; overflow-wrap:anywhere; text-align:left; outline:1px dashed transparent; border-radius:4px; user-select:none; }
+#freeText {
+  position: absolute;
+  left: 40%;
+  top: 38%;
+  width: 48%;
+  min-height: 10%;
+  padding: 5px;
+  z-index: 5;
+  color: #24202a;
+  font: 700 25px/1.18 Arial, sans-serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-align: left;
+  outline: 1px dashed transparent;
+  border-radius: 4px;
+  user-select: none;
+}
     #freeText.selected, .sticker.selected { outline:2px dashed #f044a7; outline-offset:2px; }
     .sticker { position:absolute; font-size:48px; line-height:1; cursor:move; touch-action:none; filter:drop-shadow(1px 2px 1px #0002); }
     .sticker img { width:100%; height:100%; object-fit:contain; display:block; pointer-events:none; }
